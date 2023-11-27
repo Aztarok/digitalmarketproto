@@ -1,14 +1,33 @@
 "use client";
 
 import { Icons } from "@/components/Icons";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import { useForm } from "react-hook-form";
 
-const page = () => {
+import {
+    AuthCredentialsValidator,
+    TAuthCredentialsValidator
+} from "@/lib/validators/account-credentials-validator";
+import { trpc } from "@/trpc/client";
+
+const Page = () => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm({
+        resolver: zodResolver(AuthCredentialsValidator)
+    });
+
+    const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
+        console.log("hi");
+    };
     return (
         <>
             <div className="container relative flex pt-20 flex-col items-center justify-center lg:px-0">
@@ -31,12 +50,32 @@ const page = () => {
                     </div>
 
                     <div className="grid gap-6">
+                        {/*onSubmit={handleSubmit(onSubmit)*/}
                         <form>
                             <div className="grid gap-2">
                                 <div className="grid gap-1 py-2">
                                     <Label htmlFor="email">Email</Label>
-                                    <Input></Input>
+                                    <Input
+                                        {...register("email")}
+                                        className={cn({
+                                            "focus-visible:ring-red-500":
+                                                errors.email
+                                        })}
+                                        placeholder="you@example.com"
+                                    />
                                 </div>
+                                <div className="grid gap-1 py-2">
+                                    <Label htmlFor="password">Password</Label>
+                                    <Input
+                                        {...register("password")}
+                                        className={cn({
+                                            "focus-visible:ring-red-500":
+                                                errors.password
+                                        })}
+                                        placeholder="Password"
+                                    />
+                                </div>
+                                <Button>Sign up</Button>
                             </div>
                         </form>
                     </div>
@@ -46,4 +85,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;
