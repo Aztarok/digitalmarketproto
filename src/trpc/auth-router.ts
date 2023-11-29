@@ -44,7 +44,9 @@ export const authRouter = router({
         token,
       });
 
-      if (!isVerified) throw new TRPCError({ code: "UNAUTHORIZED" });
+      if (!isVerified) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
       return { success: true };
     }),
 });
