@@ -46,7 +46,8 @@ const Page = () => {
             router.refresh();
 
             if (origin) {
-                router.push(`/${origin}`);
+                router.replace(`/${origin}`);
+                router.refresh();
                 return;
             }
             if (isSeller) {
